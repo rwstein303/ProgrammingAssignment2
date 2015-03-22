@@ -1,15 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These functions are used to create an inverse matrix for a square matrix and
+## cache it for later use.
 
-## Write a short comment describing this function
+## get - return the value of the function
+## setinv - create the inverse matrix and cache it
+## getinv - retrieve the cached inverted matrix
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(x = maxtix()) {
+    m <- NULL
+    set <- function(y) {
+        x <<- y
+        m <<- NULL
+    }
+    get <- function() x
+    setinv <- function(solve) m <<- solve
+    getinv <- function() m
+    list(set = set, get = get,
+         setinv = setinv,
+         getinv = getinv)
 }
 
-
-## Write a short comment describing this function
+## This function is used to determine the inverse of a square matrix.  If the
+## inverse matrix is cached, it is returned, rather than re-doing the
+## inversion.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    m <- x$getinv()
+    if(!is.null(m)) {
+        message("getting cached matrix")
+        return(m)
+    }
+    data <- x$get()
+    m <- solve(data, ...)
+    x$setinv(m)
+    m
 }
